@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="lib" path="ftp/ftp.jar"/>
+	<classpathentry exported="true" kind="lib" path="jdbc/ojdbc14.jar"/>
+	<classpathentry kind="lib" path="sms/activation.jar"/>
+	<classpathentry kind="lib" path="sms/axis-ant.jar"/>
+	<classpathentry kind="lib" path="sms/axis.jar"/>
+	<classpathentry kind="lib" path="sms/commons-discovery-0.2.jar"/>
+	<classpathentry kind="lib" path="sms/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="lib" path="sms/jaxrpc.jar"/>
+	<classpathentry kind="lib" path="sms/log4j-1.2.8.jar"/>
+	<classpathentry kind="lib" path="sms/mail.jar"/>
+	<classpathentry kind="lib" path="sms/saaj.jar"/>
+	<classpathentry kind="lib" path="sms/wsdl4j-1.5.1.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="owner.project.facets" value="java"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="src/sftp/jsch-0.1.53.jar"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>

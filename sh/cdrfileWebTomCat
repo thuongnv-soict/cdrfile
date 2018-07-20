@@ -1,0 +1,43 @@
+# CDR File(s) System Service, Copyright(c) by eKnowledge 2004
+# -----------------------------------
+# File  : cdrfile.jar
+#
+# Autor : eKnowledge Software
+#
+# Purpose : Starup/Stop CDRFile Service 
+#
+# -----------------------------------
+
+#!/bin/sh
+#set -x
+# Setup JAVA and JSDK enviroment:
+export JAVA_HOME=/usr/java
+export WORK_DIR=$HOME/apache-tomcat-5.5/bin
+CLASSPATH=$CLASSPATH:$JAVA_HOME:; export CLASSPATH
+case "$1" in
+   'start') #Start CDR File(s) System Service
+          echo "CDR File(s) WEB System starting..."
+	  cd $WORK_DIR
+	  startup.sh
+          echo "CDR File(s) WEB System service started."
+	  ;;
+   'stop')#Stop SMS Service
+         echo "CDR File(s) WEB System service stopping ..."
+	 cd $WORK_DIR
+         shutdown.sh
+         echo "CDR File(s) WEB System service stopped."
+         ;;
+   'restart') #Start CDR File(s) System Service
+	  echo "CDR File(s) WEB System service starting ..."
+          cd $WORK_DIR
+	  shutdown.sh
+          echo "   - CDR File(s) WEB System service stopped"
+	  startup.sh
+	  echo "   - CDR File(s) WEB System service starting ..."
+          echo "CDR File(s) WEB System service started"
+	  ;;
+    *)
+         echo "Usage: $0 {start | stop | restart}"
+         exit 1
+         ;;
+esac

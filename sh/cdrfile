@@ -1,0 +1,684 @@
+# CDR File(s) System Service, Copyright(c) by eKnowledge 2004
+# -----------------------------------
+# File  : cdrfile.jar
+#
+# Autor : eKnowledge Software
+#
+# Purpose : Starup/Stop CDRFile Service
+#
+# -----------------------------------
+
+#!/bin/sh
+#set -x
+# Setup JAVA and JSDK enviroment:
+export JAVA_HOME=$HOME/j2sdk1.4.2_09/bin
+export WORK_DIR=$HOME
+CLASSPATH=$CLASSPATH:$JAVA_HOME:$WORK_DIR/jdbc/ojdbc14.jar:$WORK_DIR/cdrfile.jar; export CLASSPATH
+
+cfg_file=$WORK_DIR/log
+
+all_start()
+{
+  echo "CDR File(s) System ALL service starting..."
+  cd $WORK_DIR
+  #Start FTP service
+  pid_file=$WORK_DIR/proc/cdrfile_ftp.pid
+  log_file=$WORK_DIR/log/ftp_service.log
+  APP_COMMAND=cdrfile.FtpManager; export APP_COMMAND
+  if [ -f $pid_file ] ; then
+    echo "   - CDR File(s) System FTP service already started."
+  else
+    sleep 2
+    java -Xms32m -Xmx128m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+    echo $! > $pid_file
+    echo "   - CDR File(s) System FTP service started."
+  fi
+  #Start CONVERT service
+  pid_file=$WORK_DIR/proc/cdrfile_convert.pid
+  log_file=$WORK_DIR/log/convert_service.log
+  APP_COMMAND=cdrfile.ConvertManager; export APP_COMMAND
+  if [ -f $pid_file ] ; then
+    echo "   - CDR File(s) System CONVERT ALCATEL service already started."
+  else
+    sleep 2
+    java -Xms64m -Xmx256m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+    echo $! > $pid_file
+    echo "   - CDR File(s) System CONVERT service started."
+  fi
+
+  #Start CHARGE service
+  pid_file=$WORK_DIR/proc/cdrfile_charge.pid
+  log_file=$WORK_DIR/log/charge_service.log
+  APP_COMMAND=cdrfile.ChargeManager; export APP_COMMAND
+  if [ -f $pid_file ] ; then
+    echo "   - CDR File(s) System CHARGE service already started."
+  else
+    sleep 2
+    java -Xms16m -Xmx128m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+    echo $! > $pid_file
+    echo "   - CDR File(s) System CHARGE service started."
+  fi
+
+  #Start EXPORT service
+  pid_file=$WORK_DIR/proc/cdrfile_export.pid
+  log_file=$WORK_DIR/log/export_service.log
+  APP_COMMAND=cdrfile.ExportManager; export APP_COMMAND
+  if [ -f $pid_file ] ; then
+    echo "   - CDR File(s) System EXPORT SWITCH service already started."
+  else
+    sleep 2
+    java -Xms128m -Xmx512m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+    echo $! > $pid_file
+    echo "   - CDR File(s) System EXPORT service started."
+  fi
+
+  #Start GENERAL service
+  pid_file=$WORK_DIR/proc/cdrfile_general.pid
+  log_file=$WORK_DIR/log/general_service.log
+  APP_COMMAND=cdrfile.GeneralManager; export APP_COMMAND
+  if [ -f $pid_file ] ; then
+    echo "   - CDR File(s) System GENERAL service already started."
+  else
+    sleep 2
+    java -Xms32m -Xmx128m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+    echo $! > $pid_file
+    echo "   - CDR File(s) System GENERAL service started."
+  fi
+  echo "CDR File(s) System ALL service already started."
+}
+ftp_start()
+{
+  cd $WORK_DIR
+  #Start FTP service
+  pid_file=$WORK_DIR/proc/cdrfile_ftp.pid
+  log_file=$WORK_DIR/log/ftp_service.log
+  APP_COMMAND=cdrfile.FtpManager; export APP_COMMAND
+  if [ -f $pid_file ] ; then
+    echo "   - CDR File(s) System FTP service already started."
+  else
+    sleep 2
+    java -Xms32m -Xmx128m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+    echo $! > $pid_file
+    echo "   - CDR File(s) System FTP service started."
+  fi
+}
+convert_start()
+{
+  #Start CONVERT service
+  pid_file=$WORK_DIR/proc/cdrfile_convert.pid
+  log_file=$WORK_DIR/log/convert_service.log
+  APP_COMMAND=cdrfile.ConvertManager; export APP_COMMAND
+  if [ -f $pid_file ] ; then
+    echo "   - CDR File(s) System CONVERT service already started."
+  else
+    sleep 2
+    java -Xms64m -Xmx256m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+    echo $! > $pid_file
+    echo "   - CDR File(s) System CONVERT service started."
+  fi
+}
+
+charge_start()
+{
+  cd $WORK_DIR
+  #Start CHARGE service
+  pid_file=$WORK_DIR/proc/cdrfile_charge.pid
+  log_file=$WORK_DIR/log/charge_service.log
+  APP_COMMAND=cdrfile.ChargeManager; export APP_COMMAND
+  if [ -f $pid_file ] ; then
+    echo "   - CDR File(s) System CHARGE service already started."
+  else
+    sleep 2
+    java -Xms16m -Xmx128m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+    echo $! > $pid_file
+    echo "   - CDR File(s) System CHARGE service started."
+  fi
+}
+
+export_start()
+{
+  cd $WORK_DIR
+  #Start EXPORT service
+  pid_file=$WORK_DIR/proc/cdrfile_export.pid
+  log_file=$WORK_DIR/log/export_service.log
+  APP_COMMAND=cdrfile.ExportManager; export APP_COMMAND
+  if [ -f $pid_file ] ; then
+    echo "   - CDR File(s) System EXPORT service already started."
+  else
+    sleep 2
+    java -Xms128m -Xmx512m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+    echo $! > $pid_file
+    echo "   - CDR File(s) System EXPORT service started."
+  fi
+}
+
+general_start()
+{
+  cd $WORK_DIR
+  #Start GENERAL service
+  pid_file=$WORK_DIR/proc/cdrfile_general.pid
+  log_file=$WORK_DIR/log/general_service.log
+  APP_COMMAND=cdrfile.GeneralManager; export APP_COMMAND
+  if [ -f $pid_file ] ; then
+    echo "   - CDR File(s) System GENERAL service already started."
+  else
+    sleep 2
+    java -Xms32m -Xmx128m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+    echo $! > $pid_file
+    echo "   - CDR File(s) System GENERAL service started."
+  fi
+}
+
+all_stop()
+{
+  echo "CDR File(s) System ALL service stopping ..."
+  cd $WORK_DIR
+  pid_file=$WORK_DIR/proc/cdrfile_ftp.pid
+  if [ -f $pid_file ] ; then
+    p_id=`cat $pid_file`
+    kill $p_id
+    sleep 1
+    while [ ! "`ps -edo pid|grep $p_id`"="" ]
+      do
+	[ -z "$flags" ] && echo "     Waiting for service to exit\c" || echo ".\c"
+        flags=a$flags
+        sleep 1
+	if [ "$flags"=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ] ; then
+	  kill -9 `cat $pid_file`
+	fi
+        done
+ 	rm $pid_file
+        sleep 1
+        echo "   - CDR File(s) System FTP service stopped."
+  else
+    echo "   - Could not found PID file."
+  fi
+
+  pid_file=$WORK_DIR/proc/cdrfile_convert.pid
+  if [ -f $pid_file ] ; then
+    p_id=`cat $pid_file`
+    kill $p_id
+    sleep 1
+    while [ ! "`ps -edo pid|grep $p_id`"="" ]
+      do
+	[ -z "$flags" ] && echo "     Waiting for service to exit\c" || echo ".\c"
+        flags=a$flags
+        sleep 1
+	if [ "$flags"=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ] ; then
+	  kill -9 `cat $pid_file`
+	fi
+        done
+ 	rm $pid_file
+        sleep 1
+        echo "   - CDR File(s) System CONVERT service stopped."
+  else
+    echo "   - Could not found PID file."
+  fi
+
+  pid_file=$WORK_DIR/proc/cdrfile_charge.pid
+  if [ -f $pid_file ] ; then
+    p_id=`cat $pid_file`
+    kill $p_id
+    sleep 1
+    while [ ! "`ps -edo pid|grep $p_id`"="" ]
+      do
+	[ -z "$flags" ] && echo "     Waiting for service to exit\c" || echo ".\c"
+        flags=a$flags
+        sleep 1
+	if [ "$flags"=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ] ; then
+	  kill -9 `cat $pid_file`
+	fi
+        done
+ 	rm $pid_file
+        sleep 1
+        echo "   - CDR File(s) System CHARGE service stopped."
+  else
+    echo "   - Could not found PID file."
+  fi
+
+  pid_file=$WORK_DIR/proc/cdrfile_export.pid
+  if [ -f $pid_file ] ; then
+    p_id=`cat $pid_file`
+    kill $p_id
+    sleep 1
+    while [ ! "`ps -edo pid|grep $p_id`"="" ]
+      do
+	[ -z "$flags" ] && echo "     Waiting for service to exit\c" || echo ".\c"
+        flags=a$flags
+        sleep 1
+	if [ "$flags"=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ] ; then
+	  kill -9 `cat $pid_file`
+	fi
+        done
+ 	rm $pid_file
+        sleep 1
+        echo "   - CDR File(s) System EXPORT service stopped."
+  else
+    echo "   - Could not found PID file."
+  fi
+
+  pid_file=$WORK_DIR/proc/cdrfile_general.pid
+  if [ -f $pid_file ] ; then
+    p_id=`cat $pid_file`
+    kill $p_id
+    sleep 1
+    while [ ! "`ps -edo pid|grep $p_id`"="" ]
+      do
+	[ -z "$flags" ] && echo "     Waiting for service to exit\c" || echo ".\c"
+        flags=a$flags
+        sleep 1
+	if [ "$flags"=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ] ; then
+	  kill -9 `cat $pid_file`
+	fi
+        done
+ 	rm $pid_file
+        sleep 1
+        echo "   - CDR File(s) System GENERAL service stopped."
+  else
+    echo "   - Could not found PID file."
+  fi
+  echo "CDR File(s) System ALL service stopped."
+}
+ftp_stop()
+{
+  cd $WORK_DIR
+  pid_file=$WORK_DIR/proc/cdrfile_ftp.pid
+  if [ -f $pid_file ] ; then
+    p_id=`cat $pid_file`
+    kill $p_id
+    sleep 1
+    while [ ! "`ps -edo pid|grep $p_id`"="" ]
+      do
+	[ -z "$flags" ] && echo "     Waiting for service to exit\c" || echo ".\c"
+        flags=a$flags
+        sleep 1
+	if [ "$flags"=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ] ; then
+	  kill -9 `cat $pid_file`
+	fi
+        done
+ 	rm $pid_file
+        sleep 1
+        echo "   - CDR File(s) System FTP service stopped."
+  else
+    echo "   - Could not found PID file."
+  fi
+}
+convert_stop()
+{
+  pid_file=$WORK_DIR/proc/cdrfile_convert.pid
+  if [ -f $pid_file ] ; then
+    p_id=`cat $pid_file`
+    kill $p_id
+    sleep 1
+    while [ ! "`ps -edo pid|grep $p_id`"="" ]
+      do
+	[ -z "$flags" ] && echo "     Waiting for service to exit\c" || echo ".\c"
+        flags=a$flags
+        sleep 1
+	if [ "$flags"=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ] ; then
+	  kill -9 `cat $pid_file`
+	fi
+        done
+ 	rm $pid_file
+        sleep 1
+        echo "   - CDR File(s) System CONVERT service stopped."
+  else
+    echo "   - Could not found PID file."
+  fi
+}
+
+charge_stop()
+{
+  cd $WORK_DIR
+  pid_file=$WORK_DIR/proc/cdrfile_charge.pid
+  if [ -f $pid_file ] ; then
+    p_id=`cat $pid_file`
+    kill $p_id
+    sleep 1
+    while [ ! "`ps -edo pid|grep $p_id`"="" ]
+      do
+	[ -z "$flags" ] && echo "     Waiting for service to exit\c" || echo ".\c"
+        flags=a$flags
+        sleep 1
+	if [ "$flags"=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ] ; then
+	  kill -9 `cat $pid_file`
+	fi
+        done
+ 	rm $pid_file
+        sleep 1
+        echo "   - CDR File(s) System CHARGE service stopped."
+  else
+    echo "   - Could not found PID file."
+  fi
+}
+
+export_stop()
+{
+  cd $WORK_DIR
+  pid_file=$WORK_DIR/proc/cdrfile_export.pid
+  if [ -f $pid_file ] ; then
+    p_id=`cat $pid_file`
+    kill $p_id
+    sleep 1
+    while [ ! "`ps -edo pid|grep $p_id`"="" ]
+      do
+	[ -z "$flags" ] && echo "     Waiting for service to exit\c" || echo ".\c"
+        flags=a$flags
+        sleep 1
+	if [ "$flags"=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ] ; then
+	  kill -9 `cat $pid_file`
+	fi
+        done
+ 	rm $pid_file
+        sleep 1
+        echo "   - CDR File(s) System EXPORT service stopped."
+  else
+    echo "   - Could not found PID file."
+  fi
+}
+
+general_stop()
+{
+  cd $WORK_DIR
+  pid_file=$WORK_DIR/proc/cdrfile_general.pid
+  if [ -f $pid_file ] ; then
+    p_id=`cat $pid_file`
+    kill $p_id
+    sleep 1
+    while [ ! "`ps -edo pid|grep $p_id`"="" ]
+      do
+	[ -z "$flags" ] && echo "     Waiting for service to exit\c" || echo ".\c"
+        flags=a$flags
+        sleep 1
+	if [ "$flags"=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ] ; then
+	  kill -9 `cat $pid_file`
+	fi
+        done
+ 	rm $pid_file
+        sleep 1
+        echo "   - CDR File(s) System GENERAL service stopped."
+  else
+    echo "   - Could not found PID file."
+  fi
+}
+
+all_restart() #Start CDR File(s) System Service
+{
+  echo "CDR File(s) System ALL service restarting ..."
+
+  cd $WORK_DIR
+  pid_file=$WORK_DIR/proc/cdrfile_ftp.pid
+  log_file=$WORK_DIR/log/ftp_service.log
+  APP_COMMAND=cdrfile.FtpManager; export APP_COMMAND
+  if [ -f $pid_file ] ; then
+    echo "   - CDR File(s) System FTP service stopping ..."
+    kill -9 `cat $pid_file`
+    rm $pid_file
+    sleep 1
+    echo "   - CDR File(s) System FTP service stopped"
+    echo "   - CDR File(s) System FTP service starting ..."
+  fi
+  sleep 1
+  java -Xms32m -Xmx128m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+  echo $! > $pid_file
+  echo "   - CDR File(s) System FTP service started."
+
+  echo "   - CDR File(s) System CONVERT service restarting."
+  pid_file=$WORK_DIR/proc/cdrfile_convert.pid
+  log_file=$WORK_DIR/log/convert_service.log
+  APP_COMMAND=cdrfile.ConvertManager; export APP_COMMAND
+  if [ -f $pid_file ] ; then
+    echo "      .CDR File(s) System CONVERT service stopping ..."
+    kill -9 `cat $pid_file`
+    rm $pid_file
+    sleep 1
+    echo "      .CDR File(s) System CONVERT service stopped"
+    echo "      .CDR File(s) System CONVERT service starting ..."
+  fi
+  sleep 2
+  java -Xms64m -Xmx256m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+  echo $! > $pid_file
+  echo "      .CDR File(s) System CONVERT service started."
+
+  pid_file=$WORK_DIR/proc/cdrfile_charge.pid
+  log_file=$WORK_DIR/log/charge_service.log
+  APP_COMMAND=cdrfile.ChargeManager; export APP_COMMAND
+  if [ -f $pid_file ] ; then
+    echo "   - CDR File(s) System CHARGE service stopping ..."
+    kill -9 `cat $pid_file`
+    rm $pid_file
+    sleep 1
+    echo "   - CDR File(s) System CHARGE service stopped"
+    echo "   - CDR File(s) System CHARGE service starting ..."
+  fi
+  sleep 2
+  java -Xms16m -Xmx128m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+  echo $! > $pid_file
+  echo "   - CDR File(s) System CHARGE service started."
+
+  pid_file=$WORK_DIR/proc/cdrfile_export.pid
+  log_file=$WORK_DIR/log/export_service.log
+  APP_COMMAND=cdrfile.ExportManager; export APP_COMMAND
+  if [ -f $pid_file ] ; then
+    echo "   - CDR File(s) System EXPORT service stopping ..."
+    kill -9 `cat $pid_file`
+    rm $pid_file
+    sleep 1
+    echo "   - CDR File(s) System EXPORT service stopped"
+    echo "   - CDR File(s) System EXPORT service starting ..."
+  fi
+  sleep 2
+  java -Xms128m -Xmx512m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+  echo $! > $pid_file
+  echo "   - CDR File(s) System EXPORT service started."
+
+  pid_file=$WORK_DIR/proc/cdrfile_general.pid
+  log_file=$WORK_DIR/log/general_service.log
+  APP_COMMAND=cdrfile.GeneralManager; export APP_COMMAND
+  if [ -f $pid_file ] ; then
+    echo "   - CDR File(s) System GENERAL service stopping ..."
+    kill -9 `cat $pid_file`
+    rm $pid_file
+    sleep 1
+    echo "   - CDR File(s) System GENERAL service stopped"
+    echo "   - CDR File(s) System GENERAL service starting ..."
+  fi
+  sleep 2
+  java -Xms32m -Xmx128m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+  echo $! > $pid_file
+  echo "   - CDR File(s) System GENERAL service started."
+  echo "CDR File(s) System ALL service restarted."
+}
+ftp_restart() #Start CDR File(s) System Service
+{
+  cd $WORK_DIR
+  pid_file=$WORK_DIR/proc/cdrfile_ftp.pid
+  log_file=$WORK_DIR/log/ftp_service.log
+  APP_COMMAND=cdrfile.FtpManager; export APP_COMMAND
+  if [ -f $pid_file ] ; then
+    echo "   - CDR File(s) System FTP service stopping ..."
+    kill -9 `cat $pid_file`
+    rm $pid_file
+    sleep 1
+    echo "   - CDR File(s) System FTP service stopped"
+    echo "   - CDR File(s) System FTP service starting ..."
+  fi
+  sleep 2
+  java -Xms32m -Xmx128m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+  echo $! > $pid_file
+  echo "   - CDR File(s) System FTP service started."
+}
+convert_restart()
+{
+  echo "   - CDR File(s) System CONVERT service restarting."
+  pid_file=$WORK_DIR/proc/cdrfile_convert.pid
+  log_file=$WORK_DIR/log/convert_service.log
+  APP_COMMAND=cdrfile.ConvertManager; export APP_COMMAND
+  if [ -f $pid_file ] ; then
+    echo "      .CDR File(s) System CONVERT service stopping ..."
+    kill -9 `cat $pid_file`
+    rm $pid_file
+    sleep 1
+    echo "      .CDR File(s) System CONVERT service stopped"
+    echo "      .CDR File(s) System CONVERT service starting ..."
+  fi
+  sleep 2
+  java -Xms64m -Xmx256m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+  echo $! > $pid_file
+  echo "      .CDR File(s) System CONVERT service started."
+}
+
+charge_restart()
+{
+  cd $WORK_DIR
+  pid_file=$WORK_DIR/proc/cdrfile_charge.pid
+  log_file=$WORK_DIR/log/charge_service.log
+  APP_COMMAND=cdrfile.ChargeManager; export APP_COMMAND
+  if [ -f $pid_file ] ; then
+    echo "   - CDR File(s) System CHARGE service stopping ..."
+    kill -9 `cat $pid_file`
+    rm $pid_file
+    sleep 1
+    echo "   - CDR File(s) System CHARGE service stopped"
+    echo "   - CDR File(s) System CHARGE service starting ..."
+  fi
+  sleep 2
+  java -Xms16m -Xmx128m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+  echo $! > $pid_file
+  echo "   - CDR File(s) System CHARGE service started."
+}
+
+export_restart()
+{
+  cd $WORK_DIR
+  pid_file=$WORK_DIR/proc/cdrfile_export.pid
+  log_file=$WORK_DIR/log/export_service.log
+  APP_COMMAND=cdrfile.ExportManager; export APP_COMMAND
+  if [ -f $pid_file ] ; then
+    echo "   - CDR File(s) System EXPORT service stopping ..."
+    kill -9 `cat $pid_file`
+    rm $pid_file
+    sleep 1
+    echo "   - CDR File(s) System EXPORT service stopped"
+    echo "   - CDR File(s) System EXPORT service starting ..."
+  fi
+  sleep 2
+  java -Xms128m -Xmx512m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+  echo $! > $pid_file
+  echo "   - CDR File(s) System EXPORT service started."
+}
+
+general_restart()
+{
+  cd $WORK_DIR
+  pid_file=$WORK_DIR/proc/cdrfile_general.pid
+  log_file=$WORK_DIR/log/general_service.log
+  APP_COMMAND=cdrfile.GeneralManager; export APP_COMMAND
+  if [ -f $pid_file ] ; then
+    echo "   - CDR File(s) System GEENERAL service stopping ..."
+    kill -9 `cat $pid_file`
+    rm $pid_file
+    sleep 1
+    echo "   - CDR File(s) System GEENERAL service stopped"
+    echo "   - CDR File(s) System GEENERAL service starting ..."
+  fi
+  sleep 2
+  java -Xms32m -Xmx128m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+  echo $! > $pid_file
+  echo "   - CDR File(s) System GEENERAL service started."
+}
+
+case "$1" in
+    'start')
+	case "$2" in
+	    'all')
+		all_start
+		;;
+	    'ftp')
+		ftp_start
+		;;
+	    'convert')
+		convert_start
+		;;
+	    'charge')
+		charge_start
+		;;
+	    'export')
+		export_start
+		;;
+	    'general')
+		general_start
+		;;
+	    *)
+        	echo "Usage: $0 $1 {all | ftp | convert | charge | export | general}"
+		echo ""
+		exit 1
+		;;
+	esac
+	;;
+    'stop')
+	case "$2" in
+	    'all')
+		all_stop
+		;;
+	    'ftp')
+		ftp_stop
+		;;
+	    'convert')
+		convert_stop
+		;;
+	    'charge')
+		charge_stop
+		;;
+	    'export')
+		export_stop
+		;;
+	    'general')
+		general_stop
+		;;
+	    *)
+        	echo "Usage: $0 $1 {all | ftp | convert | charge | export | general}"
+		echo ""
+		exit 1
+		;;
+	esac
+	;;
+    'restart')
+	case "$2" in
+	    'all')
+		all_restart
+		;;
+	    'ftp')
+		ftp_restart
+		;;
+	    'convert')
+		convert_restart
+		;;
+	    'charge')
+		charge_restart
+		;;
+	    'export')
+		export_restart
+		;;
+	    'general')
+		general_restart
+		;;
+	    *)
+        	echo "Usage: $0 $1 {all | ftp | convert | charge | export | general}"
+		echo ""
+		exit 1
+		;;
+	esac
+	;;
+    *)
+	echo ""
+	echo "Services of cdrfile centralized running ..."
+	echo ""
+	ps -ef|grep /home/cdrfile/log
+	echo ""
+	echo ""
+        echo "Usage command: $0 {start | stop | restart}"
+        echo ""
+	exit 1
+        ;;
+esac

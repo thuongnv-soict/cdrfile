@@ -1,0 +1,694 @@
+# CDR File(s) System Service, Copyright(c) by eKnowledge 2004
+# -----------------------------------
+# File  : cdrfile.jar
+#
+# Autor : eKnowledge Software
+#
+# Purpose : Start/Stop CDRFile Service
+#
+# -----------------------------------
+
+#!/bin/sh
+#set -x
+# Setup JAVA and JSDK enviroment:
+#export JAVA_HOME=$HOME/j2sdk1.4.2_09/bin
+#export JAVA_HOME=/usr/java/bin
+#export WORK_DIR=$HOME
+CLASSPATH=$CLASSPATH:$HOME/jdbc/ojdbc14.jar:$HOME/cdrfile.jar; export CLASSPATH
+
+cfg_file=$HOME/log
+
+all_start()
+{
+  echo "CDR File(s) System ALL service starting..."
+  ftp_start
+  convert_all_start
+  #charge_start
+  export_start
+  #collect_start
+  general_start
+  echo "CDR File(s) System ALL service already started."
+}
+
+ftp_start()
+{
+	cd $HOME
+ 	#Start FTP service
+ 	pid_file=$HOME/proc/cdrfile_ftp.pid
+ 	log_file=$HOME/log/ftp_service.log
+ 	APP_COMMAND=cdrfile.manager.FtpManager; export APP_COMMAND
+ 	if [ -f $pid_file ] ; then
+    	echo "   - CDR File(s) System FTP service already started."
+  	else
+    	java -Xms512m -Xmx1024m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+    	echo $! > $pid_file
+    	echo "   - CDR File(s) System FTP service started."
+	fi
+}
+
+convert_all_start()
+{
+	convert_alcatel_start
+	convert_ericsson_start
+	convert_huawei_start
+	convert_in_start
+	convert_smsc_start
+}
+
+convert_alcatel_start()
+{
+  #Start CONVERT ALCATEL service
+  pid_file=$HOME/proc/cdrfile_alcatel_convert.pid
+  log_file=$HOME/log/convert_alcatel_service.log
+  APP_COMMAND=cdrfile.manager.ConvertAlcatelManager; export APP_COMMAND
+  if [ -f $pid_file ] ; then
+    echo "   - CDR File(s) System CONVERT ALCATEL service already started."
+  else
+
+    java -Xms512m -Xmx1024m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+    echo $! > $pid_file
+    echo "   - CDR File(s) System CONVERT ALCATEL service started."
+  fi
+}
+
+convert_ericsson_start()
+{
+  #Start CONVERT ERICSSON service
+  pid_file=$HOME/proc/cdrfile_ericsson_convert.pid
+  log_file=$HOME/log/convert_ericsson_service.log
+  APP_COMMAND=cdrfile.manager.ConvertEricssonManager; export APP_COMMAND
+  if [ -f $pid_file ] ; then
+    echo "   - CDR File(s) System CONVERT ERICSSON service already started."
+  else
+
+    java -Xms512m -Xmx1024m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+    echo $! > $pid_file
+    echo "   - CDR File(s) System CONVERT ERICSSON service started."
+  fi
+}
+
+convert_huawei_start()
+{
+  #Start CONVERT HUAWEI service
+  pid_file=$HOME/proc/cdrfile_huawei_convert.pid
+  log_file=$HOME/log/convert_huawei_service.log
+  APP_COMMAND=cdrfile.manager.ConvertHuaweiManager; export APP_COMMAND
+  if [ -f $pid_file ] ; then
+    echo "   - CDR File(s) System CONVERT HUAWEI service already started."
+  else
+
+    java -Xms512m -Xmx1024m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+    echo $! > $pid_file
+    echo "   - CDR File(s) System CONVERT HUAWEI service started."
+  fi
+}
+
+convert_in_start()
+{
+  #Start CONVERT IN service
+  pid_file=$HOME/proc/cdrfile_in_convert.pid
+  log_file=$HOME/log/convert_in_service.log
+  APP_COMMAND=cdrfile.manager.ConvertInManager; export APP_COMMAND
+  if [ -f $pid_file ] ; then
+    echo "   - CDR File(s) System CONVERT IN service already started."
+  else
+
+    java -Xms512m -Xmx1024m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+    echo $! > $pid_file
+    echo "   - CDR File(s) System CONVERT IN service started."
+  fi
+}
+
+convert_smsc_start()
+{
+  #Start CONVERT SMSC service
+  pid_file=$HOME/proc/cdrfile_smsc_convert.pid
+  log_file=$HOME/log/convert_smsc_service.log
+  APP_COMMAND=cdrfile.manager.ConvertSmscManager; export APP_COMMAND
+  if [ -f $pid_file ] ; then
+    echo "   - CDR File(s) System CONVERT SMSC service already started."
+  else
+
+    java -Xms512m -Xmx1024m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+    echo $! > $pid_file
+    echo "   - CDR File(s) System CONVERT SMSC service started."
+  fi
+}
+
+charge_start()
+{
+  cd $HOME
+  #Start CHARGE service
+  pid_file=$HOME/proc/cdrfile_charge.pid
+  log_file=$HOME/log/charge_service.log
+  APP_COMMAND=cdrfile.manager.ChargeManager; export APP_COMMAND
+  if [ -f $pid_file ] ; then
+    echo "   - CDR File(s) System CHARGE service already started."
+  else
+
+    java -Xms512m -Xmx1024m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+    echo $! > $pid_file
+    echo "   - CDR File(s) System CHARGE service started."
+  fi
+}
+
+export_start()
+{
+  cd $HOME
+  #Start EXPORT service
+  pid_file=$HOME/proc/cdrfile_export.pid
+  log_file=$HOME/log/export_service.log
+  APP_COMMAND=cdrfile.manager.ExportManager; export APP_COMMAND
+  if [ -f $pid_file ] ; then
+    echo "   - CDR File(s) System EXPORT service already started."
+  else
+
+    java -Xms512m -Xmx1024m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+    echo $! > $pid_file
+    echo "   - CDR File(s) System EXPORT service started."
+  fi
+}
+
+collect_start()
+{
+  cd $HOME
+  #Start COLLECT service
+  pid_file=$HOME/proc/cdrfile_collect.pid
+  log_file=$HOME/log/collect_service.log
+  APP_COMMAND=cdrfile.manager.CollectManager; export APP_COMMAND
+  if [ -f $pid_file ] ; then
+    echo "   - CDR File(s) System COLLECT service already started."
+  else
+
+    java -Xms512m -Xmx1024m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+    echo $! > $pid_file
+    echo "   - CDR File(s) System COLLECT service started."
+  fi
+}
+
+general_start()
+{
+  cd $HOME
+  #Start GENERAL service
+  pid_file=$HOME/proc/cdrfile_general.pid
+  log_file=$HOME/log/general_service.log
+  APP_COMMAND=cdrfile.manager.GeneralManager; export APP_COMMAND
+  if [ -f $pid_file ] ; then
+    echo "   - CDR File(s) System GENERAL service already started."
+  else
+
+    java -Xms16m -Xmx128m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+    echo $! > $pid_file
+    echo "   - CDR File(s) System GENERAL service started."
+  fi
+}
+
+all_stop()
+{
+ 	echo "CDR File(s) System ALL service stopping ..."
+  	ftp_stop
+  	convert_all_stop
+  	#charge_stop
+  	export_stop
+  	#collect_stop
+  	general_stop
+  	echo "CDR File(s) System ALL service stopped."
+}
+
+ftp_stop()
+{
+	cd $HOME
+  	pid_file=$HOME/proc/cdrfile_ftp.pid
+  	if [ -f $pid_file ] ; then
+    	p_id=`cat $pid_file`
+    	kill $p_id
+    	while [ ! "`ps -edo pid|grep $p_id`"="" ]
+      	do
+			[ -z "$flags" ] && echo "     Waiting for service to exit\c" || echo ".\c"
+        	flags=a$flags
+			if [ "$flags"=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ] ; then
+	  			kill -9 `cat $pid_file`
+			fi
+        done
+ 		rm $pid_file
+        echo "   - CDR File(s) System FTP service stopped."
+  	else
+    	echo "   - Could not found PID file."
+  	fi
+}
+
+convert_all_stop()
+{
+	convert_alcatel_stop
+	convert_ericsson_stop
+	convert_huawei_stop
+	convert_in_stop
+	convert_smsc_stop
+}
+
+convert_alcatel_stop()
+{
+	pid_file=$HOME/proc/cdrfile_alcatel_convert.pid
+  	if [ -f $pid_file ] ; then
+    	p_id=`cat $pid_file`
+    	kill $p_id
+    	while [ ! "`ps -edo pid|grep $p_id`"="" ]
+      	do
+			[ -z "$flags" ] && echo "     Waiting for service to exit\c" || echo ".\c"
+        	flags=a$flags
+			if [ "$flags"=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ] ; then
+	  			kill -9 `cat $pid_file`
+			fi
+        done
+ 		rm $pid_file
+        echo "   - CDR File(s) System CONVERT ALCATEL service stopped."
+  	else
+    	echo "   - Could not found PID file."
+  	fi
+}
+
+convert_ericsson_stop()
+{
+  	pid_file=$HOME/proc/cdrfile_ericsson_convert.pid
+  	if [ -f $pid_file ] ; then
+    	p_id=`cat $pid_file`
+    	kill $p_id
+    	while [ ! "`ps -edo pid|grep $p_id`"="" ]
+      	do
+			[ -z "$flags" ] && echo "     Waiting for service to exit\c" || echo ".\c"
+	        flags=a$flags
+			if [ "$flags"=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ] ; then
+	  			kill -9 `cat $pid_file`
+			fi
+        done
+ 		rm $pid_file
+        echo "   - CDR File(s) System CONVERT ERICSSON service stopped."
+  	else
+    	echo "   - Could not found PID file."
+  	fi
+}
+
+convert_huawei_stop()
+{
+  	pid_file=$HOME/proc/cdrfile_huawei_convert.pid
+  	if [ -f $pid_file ] ; then
+    	p_id=`cat $pid_file`
+    	kill $p_id
+    	while [ ! "`ps -edo pid|grep $p_id`"="" ]
+    	do
+		[ -z "$flags" ] && echo "     Waiting for service to exit\c" || echo ".\c"
+        flags=a$flags
+		if [ "$flags"=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ] ; then
+	  		kill -9 `cat $pid_file`
+		fi
+    	done
+ 		rm $pid_file
+    	echo "   - CDR File(s) System CONVERT HUAWEI service stopped."
+	else
+    	echo "   - Could not found PID file."
+  	fi
+}
+
+convert_in_stop()
+{
+  	pid_file=$HOME/proc/cdrfile_in_convert.pid
+  	if [ -f $pid_file ] ; then
+    	p_id=`cat $pid_file`
+    	kill $p_id
+    	while [ ! "`ps -edo pid|grep $p_id`"="" ]
+      	do
+			[ -z "$flags" ] && echo "     Waiting for service to exit\c" || echo ".\c"
+        	flags=a$flags
+			if [ "$flags"=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ] ; then
+	  			kill -9 `cat $pid_file`
+			fi
+        done
+ 		rm $pid_file
+        echo "   - CDR File(s) System CONVERT IN service stopped."
+  	else
+    	echo "   - Could not found PID file."
+  	fi
+}
+
+convert_smsc_stop()
+{
+  	pid_file=$HOME/proc/cdrfile_smsc_convert.pid
+  	if [ -f $pid_file ] ; then
+    	p_id=`cat $pid_file`
+    	kill $p_id
+    	while [ ! "`ps -edo pid|grep $p_id`"="" ]
+      	do
+			[ -z "$flags" ] && echo "     Waiting for service to exit\c" || echo ".\c"
+	        flags=a$flags
+			if [ "$flags"=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ] ; then
+	  			kill -9 `cat $pid_file`
+			fi
+        done
+ 		rm $pid_file
+        echo "   - CDR File(s) System CONVERT SMSC service stopped."
+  	else
+    	echo "   - Could not found PID file."
+  	fi
+}
+
+charge_stop()
+{
+  	cd $HOME
+  	pid_file=$HOME/proc/cdrfile_charge.pid
+  	if [ -f $pid_file ] ; then
+	    p_id=`cat $pid_file`
+    	kill $p_id
+    	while [ ! "`ps -edo pid|grep $p_id`"="" ]
+      	do
+			[ -z "$flags" ] && echo "     Waiting for service to exit\c" || echo ".\c"
+        	flags=a$flags
+			if [ "$flags"=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ] ; then
+	  			kill -9 `cat $pid_file`
+			fi
+    	done
+ 		rm $pid_file
+    	echo "   - CDR File(s) System CHARGE service stopped."
+  	else
+    	echo "   - Could not found PID file."
+  	fi
+}
+
+export_stop()
+{
+  	cd $HOME
+  	pid_file=$HOME/proc/cdrfile_export.pid
+  	if [ -f $pid_file ] ; then
+	    p_id=`cat $pid_file`
+    	kill $p_id
+    	while [ ! "`ps -edo pid|grep $p_id`"="" ]
+      	do
+			[ -z "$flags" ] && echo "     Waiting for service to exit\c" || echo ".\c"
+        	flags=a$flags
+			if [ "$flags"=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ] ; then
+	  			kill -9 `cat $pid_file`
+			fi
+        done
+ 		rm $pid_file
+        echo "   - CDR File(s) System EXPORT service stopped."
+  	else
+    	echo "   - Could not found PID file."
+  fi
+}
+
+collect_stop()
+{
+  	cd $HOME
+  	pid_file=$HOME/proc/cdrfile_collect.pid
+  	if [ -f $pid_file ] ; then
+    	p_id=`cat $pid_file`
+    	kill $p_id
+    	while [ ! "`ps -edo pid|grep $p_id`"="" ]
+      	do
+			[ -z "$flags" ] && echo "     Waiting for service to exit\c" || echo ".\c"
+        	flags=a$flags
+			if [ "$flags"=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ] ; then
+	  			kill -9 `cat $pid_file`
+			fi
+        done
+ 		rm $pid_file
+        echo "   - CDR File(s) System COLLECT service stopped."
+  	else
+    	echo "   - Could not found PID file."
+  	fi
+}
+
+general_stop()
+{
+  	cd $HOME
+  	pid_file=$HOME/proc/cdrfile_general.pid
+  	if [ -f $pid_file ] ; then
+    	p_id=`cat $pid_file`
+    	kill $p_id
+    	while [ ! "`ps -edo pid|grep $p_id`"="" ]
+      	do
+			[ -z "$flags" ] && echo "     Waiting for service to exit\c" || echo ".\c"
+        	flags=a$flags
+			if [ "$flags"=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ] ; then
+	  			kill -9 `cat $pid_file`
+			fi
+        done
+ 		rm $pid_file
+        echo "   - CDR File(s) System GENERAL service stopped."
+  	else
+    	echo "   - Could not found PID file."
+  	fi
+}
+
+all_restart() #Start CDR File(s) System Service
+{
+	echo "CDR File(s) System ALL service restarting ..."
+	ftp_restart
+	convert_all_restart
+	#charge_restart
+	export_restart
+	#collect_restart
+	general_restart
+	echo "CDR File(s) System ALL service restarted."
+}
+
+ftp_restart()
+{
+	ftp_stop
+	ftp_start
+}
+
+convert_all_restart()
+{
+	convert_all_stop
+	convert_all_start
+}
+
+convert_alcatel_restart()
+{
+	convert_alcatel_stop
+	convert_alcatel_start
+}
+
+convert_ericsson_restart()
+{
+	convert_ericsson_stop
+	convert_ericsson_start
+}
+
+convert_huawei_restart()
+{
+	convert_huawei_stop
+	convert_huawei_start
+}
+
+convert_in_restart()
+{
+	convert_in_stop
+	convert_in_start
+}
+
+convert_smsc_restart()
+{
+	convert_smsc_stop
+	convert_smsc_start
+}
+
+charge_restart()
+{
+	charge_stop
+	charge_start
+}
+
+export_restart()
+{
+	export_stop
+	export_start
+}
+
+collect_restart()
+{
+	collect_stop
+	collect_start
+}
+
+general_restart()
+{
+	general_stop
+	general_start
+}
+
+case "$1" in
+    'start')
+        case "$2" in
+    	    'all')
+		        all_start
+      		;;
+	        'ftp')
+          		ftp_start
+      		;;
+	        'convert')
+      	      case "$3" in
+	              'all')
+        		        convert_all_start
+		          ;;
+      	          'alcatel')
+		                convert_alcatel_start
+      		      ;;
+            	  'ericsson')
+		                convert_ericsson_start
+      		      ;;
+                  'huawei')
+                    convert_huawei_start
+                  ;;
+            	  'in')
+		                convert_in_start
+      		      ;;
+            	  'smsc')
+		                convert_smsc_start
+      		      ;;
+                *)
+              	  echo "Usage: $1 $2 {all | alcatel | ericsson | huawei | in | smsc}"
+            		  echo ""
+      		        exit 1
+                ;;
+              esac
+  	      ;;
+          'charge')
+		          charge_start
+		      ;;
+          'export')
+    		      export_start
+		      ;;
+	        'collect')
+		          collect_start
+		      ;;
+          'general')
+	    	      general_start
+		      ;;
+          *)
+       	      echo "Usage: $1 {all | ftp | convert | charge | expor_ | collect | general}"
+		          echo ""
+    		      exit 1
+		      ;;
+    esac
+	  ;;
+    'stop')
+        case "$2" in
+	        'all')
+          		all_stop
+		      ;;
+	        'ftp')
+		          ftp_stop
+		      ;;
+          'convert')
+              case "$3" in
+	              'all')
+                    convert_all_stop
+      		      ;;
+	              'alcatel')
+		                convert_alcatel_stop
+      		      ;;
+            	  'ericsson')
+		                convert_ericsson_stop
+      		      ;;
+                  'huawei')
+                  		convert_huawei_stop
+                  ;;
+            	  'in')
+		                convert_in_stop
+      		      ;;
+            	  'smsc')
+		                convert_smsc_stop
+      		      ;;
+                *)
+        	          echo "Usage: $1 $2 {all | alcatel | ericsson | huawei | in | smsc}"
+              		  echo ""
+              		  exit 1
+            		;;
+              esac
+      		;;
+	        'charge')
+          		charge_stop
+      		;;
+	        'export')
+      		    export_stop
+      		;;
+    	    'collect')
+		          collect_stop
+      		;;
+	        'general')
+          		general_stop
+      		;;
+	        *)
+        	    echo "Usage: $1 {all | ftp | convert | charge | expor_ | collect | general}"
+          		echo ""
+          		exit 1
+      		;;
+    	  esac
+	  ;;
+    'restart')
+      	case "$2" in
+	          'all')
+            		all_restart
+        		;;
+      	    'ftp')
+            		ftp_restart
+        		;;
+      	    'convert')
+          	    case "$3" in
+        	        'all')
+		                  convert_all_restart
+        		      ;;
+	                'alcatel')
+          		        convert_alcatel_restart
+        		      ;;
+      	          'ericsson')
+          		        convert_ericsson_restart
+		              ;;
+                  'huawei')
+                      convert_huawei_restart
+                  ;;
+              	  'in')
+		                  convert_in_restart
+        		      ;;
+              	  'smsc')
+		                  convert_smsc_restart
+        		      ;;
+                  *)
+                  	  echo "Usage: $1 $2{all | alcatel | ericsson | huawei | in | smsc}"
+      		            echo ""
+                		  exit 1
+      		        ;;
+                esac
+        		;;
+      	    'charge')
+            		charge_restart
+        		;;
+      	    'export')
+            		export_restart
+        		;;
+      	    'collect')
+            		collect_restart
+        		;;
+            'general')
+            		general_restart
+        		;;
+      	    *)
+              	echo "Usage: $1 {all | ftp | convert | charge | expor_ | collect | general}"
+            		echo ""
+            		exit 1
+        		;;
+      	esac
+  	;;
+    *)
+	      echo ""
+      	echo "Services of cdrfile centralized running ..."
+      	echo ""
+      	ps -ef|grep cdrfile.manager
+      	echo ""
+      	echo ""
+        echo "Usage command: {start | stop | restart}"
+        echo ""
+      	exit 1
+    ;;
+esac

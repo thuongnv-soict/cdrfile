@@ -1,0 +1,90 @@
+# CDR File(s) System Service, Copyright(c) by eKnowledge 2004
+# -----------------------------------
+# File  : cdrfile.jar
+#
+# Autor : eKnowledge Software
+#
+# Purpose : Start/Stop CDRFile Service
+#
+# -----------------------------------
+
+#!/bin/sh
+#set -x
+# Setup JAVA and JSDK enviroment:
+#export JAVA_HOME=$HOME/apache-tomcat-5/jdk1.5.0_09
+#export WORK_DIR=$HOME
+CLASSPATH=$CLASSPATH:$HOME/cdrfile.jar:$HOME/jdbc/ojdbc14.jar; export CLASSPATH
+
+cfg_file=$HOME/log
+
+start()
+{
+	cd $HOME
+ 	#Start CDRFile Cluster service
+ 	pid_file=$HOME/proc/cdrfile_cluster.pid
+ 	log_file=$HOME/log/cdrfile_cluster.log
+ 	APP_COMMAND=cdrfile.manager.ClusterManager; export APP_COMMAND
+ 	if [ -f $pid_file ] ; then
+    	echo "   - CDR File(s) System CDRFile Cluster service already started."
+  	else
+    	sleep 2
+    	java -Xms16m -Xmx32m $APP_COMMAND $cfg_file >>$log_file 2>&1 &
+    	echo $! > $pid_file
+    	echo "   - CDR File(s) System CDRFile Cluster service started."
+	fi
+}
+
+stop()
+{
+  cd $HOME
+  pid_file=$HOME/proc/cdrfile_cluster.pid
+  if [ -f $pid_file ] ; then
+    p_id=`cat $pid_file`
+    kill $p_id
+    sleep 1
+    while [ ! "`ps -edo pid|grep $p_id`"="" ]
+      do
+	[ -z "$flags" ] && echo "     Waiting for service to exit\c" || echo ".\c"
+        flags=a$flags
+        sleep 1
+	if [ "$flags"=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ] ; then
+	  kill -9 `cat $pid_file`
+	fi
+        done
+ 	rm $pid_file
+        sleep 1
+        echo "   - CDR File(s) System CDRFile Cluster service stopped."
+  else
+    echo "   - Could not found PID file."
+  fi
+}
+
+restart()
+{
+	stop
+	start
+}
+
+case "$1" in
+    'start')
+        stop
+        start
+		;;
+    'stop')
+		stop
+		;;
+    'restart')
+      	restart
+  	    ;;
+    *)
+	    echo ""
+      	echo "Services of CDRFILE centralized running ..."
+      	echo ""
+      	ps -ef|grep cdrfile.manager
+      	echo ""
+      	echo ""
+        echo "Usage command: $0 {start | stop | restart}"
+        echo ""
+      	exit 1
+    ;;
+esac
