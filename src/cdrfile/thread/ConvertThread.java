@@ -2225,7 +2225,11 @@ public class ConvertThread extends ThreadInfo {
 										+ EricssonCDR.camelDestinationAddress + "|" + EricssonCDR.smsResult + "|"
 										+ EricssonCDR.callerIP + "|" + EricssonCDR.calledIP + "|"
 										+ EricssonCDR.CallTypeDetail + "|" + EricssonCDR.RMnumber + "|" + EricssonCDR.originalCalledNumber
-										+ convertHeadNumber(EricssonCDR.Calling_isdn) + "|" + convertHeadNumber(EricssonCDR.Called_isdn);
+										/*
+										 *  Add calling isdn change, called isdn change
+										 *  @Author: thuongnv
+										 */
+										+ "|" + convertHeadNumber(EricssonCDR.Calling_isdn) + "|" + convertHeadNumber(EricssonCDR.Called_isdn);
 
 								// chargeResult.intCollectType;
 								fileConvert.addText(mStrValues);
@@ -33470,13 +33474,18 @@ class ConvertFCDR {
 			/*
 			 * Test convert 11 to 10 Ericsson R10
 			 */
-			
-			 /*
+			/*
+			 //R11
 			 int mret =
-			 cvE.EricssonFile_R10("C:\\Users\\Thuong\\Desktop\\VHC\\VTQT\\CDR\\Sample\\Ericsson_R10",
-			 "TTFILE01-332596", 1,
+			 cvE.EricssonFile_R10("C:\\Users\\Thuong\\Desktop\\VHC\\VTQT\\CDR\\Sample\\Ericsson_R11",
+			 "TTFILE1E-4089", 1,
 			 "C:\\Users\\Thuong\\Desktop\\VHC\\VTQT\\CDR\\output", "", 0, 2);
-			 */
+			*/
+			//R10
+			int mret =
+					 cvE.EricssonFile_R10("C:\\Users\\Thuong\\Desktop\\VHC\\VTQT\\CDR\\Sample\\Ericsson_R10",
+					 "TTFILE01-332596", 1,
+					 "C:\\Users\\Thuong\\Desktop\\VHC\\VTQT\\CDR\\output", "", 0, 2);
 			
 			
 			//-----------------------IGW Sonic------------------------------
@@ -33505,12 +33514,13 @@ class ConvertFCDR {
 			/*
 			 * Test convert 11 to 10 Huawei V212
 			 */
+			/*
 				 int mret =
-				 cvICC.INFile_ICC462("C:\\Users\\Thuong\\Desktop\\VHC\\VTQT\\CDR\\Error",
-				 "acc19904329_3222", 1,
+				 cvICC.INFile_ICC462("C:\\Users\\Thuong\\Desktop\\VHC\\VTQT\\CDR\\Sample\\ICC",
+				 "acc20300091_2739", 1,
 				 "C:\\Users\\Thuong\\Desktop\\VHC\\VTQT\\CDR\\output", "", 0, 2);
 				
-			
+			*/
 			
 			
 			// int mret =

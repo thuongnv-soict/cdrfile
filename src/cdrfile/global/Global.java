@@ -364,7 +364,7 @@ public class Global
     		"|DISCONNECT_INITIATOR|EGRESS_TRUNK_NAME|INCOMMING_CALL_NUMBER|CPG_NUMBER|INGRESS_NET_TYPE|INGRESS_CODEC_TYPE|INGRESS_AUDIO_ENCODE" +
     		"|EGRESS_NET_TYPE|EGRESS_CODEC_TYPE|EGRESS_AUDIO_ENCODE|POLICY_REPONSE_CALL|INGRESS_LOCAL_IP|INGRESS_REMOTE_IP|OVERLOAD_STATUS"
     		+"|ACC_ID|INGRESS_PSTN|INGRESS_IP|EGERSS_PSTN|EGERSS_IP|CALL_GROUP_ID|CALLING_NAME|INGRESS_LOCAL_IP|INGRESS_REMOTE_IP"
-    		+"|CALLING_NUMBER_CHANGE|CALLED_NUMBER_CHANGE";
+    		+"|calling isdn change|called isdn change";
 
     public static final String FCDR_HEADER = "Date|Time|inbound|Orig_msis|Orig_msisUTF8|Recip_msis|Recip_msisUTF8|ogti_msis|ogti_msisUTF8|origIntlMobileSubId|RoutingNumber|smsContentDcs"
 			+"|smscPre_msis|smscPre_msisUTF8|intlMobileSubId|length|dgti_msis|dgti_msisUTF8";
